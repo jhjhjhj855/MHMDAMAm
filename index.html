@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة الكاربوهيدرات - كروب أطفال السكري النوع الأول في العراق</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="/manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered!', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
+</script>
+</head>
+<body>
+  <div class="container">
+    <div class="header-group">
+      <img src="iraq-diabetes-logo.png" alt="شعار كروب أطفال السكري النوع الأول في العراق" class="group-logo">
+      <h1>حاسبة الكاربوهيدرات 🤓</h1>
+      <p class="group-name">كروب أطفال السكري النوع الأول في العراق 🇮🇶</p>
+      <p class="description">هاي الحاسبة راح تساعد أهلنا الكرام بحساب الكاربوهيدرات لأطفالنا الأبطال! 😉</p>
+    </div>
+
+    <div class="input-section">
+      <h2>🆕 إضافة وجبة جديدة:</h2>
+      
+      <label for="mealDate">📅 تاريخ الوجبة:</label>
+      <input type="date" id="mealDate">
+
+      <label for="mealTime">⏰ وقت الوجبة:</label>
+      <input type="time" id="mealTime">
+
+      <label for="bloodSugarBefore">🩸 قياس السكر قبل الوجبة (ملغ/دل):</label>
+      <input type="number" id="bloodSugarBefore" placeholder="مثلاً 120">
+      
+      <label for="foodCategory">📦 اختار فئة الأكل:</label>
+      <select id="foodCategory" onchange="populateFoodItems()">
+        <option value="">-- اختار فئة الأكل --</option>
+      </select>
+
+      <label for="foodItem">🥘 اختار نوع الأكل اللي راح تاكله:</label>
+      <select id="foodItem" onchange="setCarbFactorFromData()">
+        <option value="">-- اختار نوع الأكل --</option>
+      </select>
+
+      <label for="foodAmount">📏 شكد راح تاكل؟ (بالغرام):</label>
+      <input type="number" id="foodAmount" placeholder="مثلاً 150 غرام">
+
+      <label for="carbFactor">⚙️ معامل الكاربوهيدرات (كل 100 غرام بيها هل كد كاربوهيدرات):</label>
+      <input type="number" step="0.01" id="carbFactor" placeholder="راح يطلع هنا تلقائيًا" readonly>
+
+      <div id="currentCarbsResult" class="result"></div>
+      
+      <button onclick="addFoodToCurrentMeal()">أضف هذا الصنف إلى الصحن ➕</button>
+      <button class="clear-button" onclick="clearCurrentFoodInput()">مسح حقول الصنف 🗑️</button>
+
+      <div class="current-meal-section">
+        <h3>🍽️ مكونات الصحن الحالي:</h3>
+        <div id="currentMealItems">
+          <p>لا توجد أصناف في الصحن حالياً.</p>
+        </div>
+        <div id="currentMealTotalCarbs" class="result"></div>
+        <button onclick="calculateAndSaveCompositeMeal()">احسب وسجل الوجبة الكاملة 📝</button>
+        <button class="clear-button" onclick="clearCurrentMeal()">مسح الصحن بالكامل ❌</button>
+      </div>
+
+      <label for="bloodSugarAfter">🩸 قياس السكر بعد ساعتين من الوجبة (ملغ/دل):</label>
+      <input type="number" id="bloodSugarAfter" placeholder="مثلاً 150">
+
+      <div class="medical-note">
+        <p>
+          <img src="https://via.placeholder.com/20" alt="ملاحظة" style="vertical-align: middle;">
+          <strong>ملاحظة طبية هامة:</strong> <br>
+          معامل الأنسولين للكربوهيدرات المذكور في هذا التطبيق هو لأغراض توضيحية فقط.
+          النسبة الفعلية تختلف بشكل كبير من شخص لآخر وتتأثر بعوامل متعددة (العمر، الوزن، النشاط، حساسية الأنسولين، إلخ).
+          يجب دائمًا استشارة أخصائي السكري أو الطبيب لتحديد نسب الأنسولين الصحيحة لطفلك،
+          وعدم الاعتماد الكلي على هذا التطبيق لاتخاذ قرارات طبية حقيقية.
+        </p>
+      </div>
+    </div>
+
+    <div class="input-section">
+      <h2>📊 سجل الوجبات:</h2>
+      <div id="mealHistory" class="meal-history">
+        </div>
+      <button class="clear-button" onclick="clearMealHistory()">مسح سجل الوجبات بالكامل ⚠️</button>
+    </div>
+  </div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
